@@ -36,7 +36,10 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'grape', '~> 1.3', '>= 1.3.3'
 gem 'trailblazer-rails', '~> 2.1', '>= 2.1.7'
+gem 'reform', '~> 2.3', '>= 2.3.1'
+gem 'reform-rails', '~> 0.2.0'
 gem 'dry-validation', '~> 1.5'
+gem 'dry-monads', '~> 1.3', '>= 1.3.5'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -27,5 +27,7 @@ module Tap
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    # config.reform.validations = :dry
+    config.reform.validations = :active_model
   end
 end
