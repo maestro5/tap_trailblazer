@@ -1,6 +1,54 @@
 require 'rails_helper'
 
 RSpec.describe API::V1::Projects do
+  context 'GET /api/v1/projects' do
+    let(:projects_amount) { 3 }
+    let!(:projects) { create_list(:project, projects_amount) }
+    let(:params) { }
+
+    before { get '/api/v1/projects', params: params }
+
+    context 'without pagination' do
+      it 'returns 200 status' do
+        expect(response.status).to eq(200)
+      end
+
+      it 'returns a list of projects' do
+        response_body = JSON.parse(response.body)
+        response_ids  = response_body.map {|project| project['id']}
+
+        expect(response_body.count).to eq(projects_amount)
+        expect(response_ids).to eq(projects.map(&:id))
+      end
+    end
+
+    context 'with pagination and sorting' do
+      let(:per) { 2 }
+      let(:params) do
+        {
+          'page'      => 1,
+          'per'       => per,
+          'sort_attr' => 'name',
+          'order'     => 'desc',
+        }
+      end
+
+      it 'returns 200 status' do
+        expect(response.status).to eq(200)
+      end
+
+      it 'returns a list of projects' do
+        response_body = JSON.parse(response.body)
+        response_ids  = response_body.map {|project| project['id']}
+
+        expect(response_body.count).not_to eq(projects_amount)
+        expect(response_body.count).to eq(per)
+
+        expect(response_ids).to eq(projects.map(&:id).reverse.take(2))
+      end
+    end
+  end
+
   context 'POST /api/v1/projects' do
     let(:name)         { "Test Project" }
     let(:tags)         { { 'tag1' => 'tag test'} }
